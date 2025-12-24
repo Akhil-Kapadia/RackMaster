@@ -8,24 +8,22 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "engines": {
+    "node": ">=16.14.0"
+  },
   "dependencies": {
-    "next": "^13.4.10",
+    "next": "^13.5.11",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "@mui/material": "^5.14.7",
+    "@mui/material": "^5.18.0",
     "@emotion/react": "^11.11.0",
-    "@emotion/styled": "^11.11.0"
-  }
-  ,
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.18.0",
+    "@emotion/server": "^11.11.0"
+  },
   "devDependencies": {
     "typescript": "^5.1.6",
     "@types/react": "^18.2.21",
     "@types/node": "^20.5.1"
-  }
-
-  ,
-  "dependencies": {
-    "@mui/icons-material": "^5.14.11",
-    "@emotion/server": "^11.11.0"
   }
 }
