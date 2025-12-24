@@ -28,6 +28,7 @@ import RefreshIcon from '@mui/icons-material/Refresh'
 import InfoIcon from '@mui/icons-material/Info'
 import WarningAmberIcon from '@mui/icons-material/WarningAmber'
 import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred'
+import EntityDialog from './EntityDialog'
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:8000/api/v1'
 
