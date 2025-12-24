@@ -1,17 +1,33 @@
 from django.db import models
 
 
+class UppercaseSerialMixin(models.Model):
+    """Abstract mixin to uppercase configured serial fields on save."""
+    serial_fields = []
+
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        for field in getattr(self, 'serial_fields', []):
+            val = getattr(self, field, None)
+            if isinstance(val, str) and val:
+                setattr(self, field, val.upper())
+        super().save(*args, **kwargs)
+
+
 class Severity(models.TextChoices):
     INFO = 'INFO', 'Info'
     WARNING = 'WARNING', 'Warning'
     CRITICAL = 'CRITICAL', 'Critical'
 
 
-class Rack(models.Model):
+class Rack(UppercaseSerialMixin, models.Model):
     """Model representing a physical rack in a data center."""
     name = models.CharField(max_length=256)
     location = models.CharField(max_length=256)
     serial_number = models.CharField(max_length=200, unique=True, blank=True, null=True)
+    serial_fields = ['serial_number']
     status_message = models.ForeignKey('StatusMessage', blank=True, null=True, on_delete=models.SET_NULL)
     
     def __str__(self):
@@ -33,12 +49,13 @@ class UnitType(models.Model):
     def __str__(self):
         return self.name
 
-class Unit(models.Model):
+class Unit(UppercaseSerialMixin, models.Model):
     """Model representing a unit within a rack."""
     unit_type = models.ForeignKey(UnitType, on_delete=models.CASCADE)
     rack = models.ForeignKey(Rack, related_name='units', on_delete=models.SET_NULL, blank=True, null=True)
     position = models.PositiveIntegerField(blank=True, null=True)
     serial_number = models.CharField(max_length=256, unique=True)
+    serial_fields = ['serial_number']
     status_message = models.ForeignKey(StatusMessage, blank=True, null=True, on_delete=models.SET_NULL)
 
     # connections to other units (many-to-many self relationship)
@@ -48,11 +65,12 @@ class Unit(models.Model):
         return f"{self.unit_type} - {self.serial_number}"
 
 
-class Device(models.Model):
+class Device(UppercaseSerialMixin, models.Model):
     """Model representing a device installed in a unit."""
     unit = models.ForeignKey(Unit, related_name='devices', blank=True, null=True, on_delete=models.SET_NULL)
     device_type = models.ForeignKey('DeviceType', on_delete=models.CASCADE)
     serial_number = models.CharField(max_length=200, unique=True)
+    serial_fields = ['serial_number']
     status_message = models.ForeignKey(StatusMessage, blank=True, null=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -66,11 +84,12 @@ class DeviceType(models.Model):
     def __str__(self):
         return self.name
     
-class DeviceModule(models.Model):
+class DeviceModule(UppercaseSerialMixin, models.Model):
     """Model representing a module within a device."""
-    device = models.ForeignKey(Device, related_name='modules', on_delete=models.CASCADE)
+    device = models.ForeignKey(Device, related_name='modules', on_delete=models.SET_NULL, blank=True, null=True)
     name = models.CharField(max_length=256)
     serial_number = models.CharField(max_length=200, unique=True)
+    serial_fields = ['serial_number']
     status_message = models.ForeignKey(StatusMessage, blank=True, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):
