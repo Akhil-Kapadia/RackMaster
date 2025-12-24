@@ -1,0 +1,44 @@
+.PHONY: win-help win-env win-install-backend win-migrate win-run-backend win-install-frontend win-run-frontend win-docker-up win-docker-down win-build win-test-backend win-test-frontend
+
+win-help:
+	@echo "Windows PowerShell targets:"
+	@echo "  make win-env               # create .env files from examples"
+	@echo "  make win-install-backend   # create backend venv and install requirements"
+	@echo "  make win-run-backend       # run Django dev server (uses backend venv)"
+	@echo "  make win-install-frontend  # install frontend npm deps"
+	@echo "  make win-run-frontend      # run React dev server"
+	@echo "  make win-docker-up         # docker-compose up --build"
+	@echo "  make win-docker-down       # docker-compose down"
+
+win-env:
+	@powershell -NoProfile -Command "if(-not (Test-Path '.env')) { Copy-Item '.env.example' '.env' }; if(-not (Test-Path 'backend/.env')) { Copy-Item 'backend/.env.example' 'backend/.env' }; if(-not (Test-Path 'frontend/.env')) { Copy-Item 'frontend/.env.example' 'frontend/.env' }; Write-Host 'Env files created (if they were missing).'
+
+win-install-backend:
+	@powershell -NoProfile -Command "if(-not (Test-Path 'server/.venv')) { python -m venv server/.venv }; . 'server/.venv/Scripts/Activate.ps1'; pip install -r server/requirements.txt; Write-Host 'Server venv created and requirements installed.'"
+
+win-migrate:
+	@powershell -NoProfile -Command ". 'server/.venv/Scripts/Activate.ps1'; python server/manage.py migrate"
+
+win-run-backend:
+	@powershell -NoProfile -Command ". 'server/.venv/Scripts/Activate.ps1'; python server/manage.py runserver 0.0.0.0:8000"
+
+win-install-frontend:
+	@powershell -NoProfile -Command "cd frontend; npm install"
+
+win-run-frontend:
+	@powershell -NoProfile -Command "cd frontend; npm start"
+
+win-docker-up:
+	@powershell -NoProfile -Command "docker-compose up --build"
+
+win-docker-down:
+	@powershell -NoProfile -Command "docker-compose down"
+
+win-build:
+	@powershell -NoProfile -Command "docker-compose build"
+
+win-test-backend:
+	@powershell -NoProfile -Command ". 'backend/.venv/Scripts/Activate.ps1'; python backend/manage.py test"
+
+win-test-frontend:
+	@powershell -NoProfile -Command "cd frontend; npm test --silent"

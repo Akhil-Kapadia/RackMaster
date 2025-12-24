@@ -110,7 +110,7 @@ npm test
 
 == Where to look in the repo
 
-- Backend: backend/
+- Backend: server/ (previously `backend`)
 - Frontend: frontend/
 - Compose file: docker-compose.yml
 

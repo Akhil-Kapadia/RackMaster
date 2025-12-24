@@ -3,9 +3,9 @@ import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'dev-secret'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'dev-secret')
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') in ('True', 'true', '1')
 
 ALLOWED_HOSTS = ['*']
 
@@ -18,7 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
-    'api',
+    'RackMaster',
 ]
 
 MIDDLEWARE = [
@@ -32,7 +32,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'backend_project.urls'
+ROOT_URLCONF = 'server_project.urls'
 
 TEMPLATES = [
     {
@@ -50,7 +50,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'backend_project.wsgi.application'
+WSGI_APPLICATION = 'server_project.wsgi.application'
 
 DATABASES = {
     'default': {

@@ -1,0 +1,7 @@
+version: '3.8'
+services:
+  server:
+    volumes:
+      - "${LOCAL_WORKSPACE_FOLDER:-.}:/workspace:cached"
+    environment:
+      - PYTHONUNBUFFERED=1

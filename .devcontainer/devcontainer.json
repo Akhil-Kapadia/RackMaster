@@ -1,0 +1,20 @@
+{
+  "name": "RackMaster Devcontainer",
+  "dockerComposeFile": [ "../docker-compose.yml" ],
+  "service": "server",
+  "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
+  "shutdownAction": "stopCompose",
+  "forwardPorts": [8000, 3000],
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  "postCreateCommand": "bash -lc 'if [ -d server ]; then python -m venv server/.venv || true; . server/.venv/bin/activate && pip install -r server/requirements.txt || true; fi; if [ -d frontend ]; then cd frontend && npm install || true; fi'",
+  "extensions": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "esbenp.prettier-vscode",
+    "dbaeumer.vscode-eslint"
+  ],
+  "remoteUser": "root"
+}
