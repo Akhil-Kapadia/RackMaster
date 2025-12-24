@@ -16,4 +16,4 @@ services:
     volumes:
       - ./frontend:/app
     depends_on:
-      - backend
+      - server
