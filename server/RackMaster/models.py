@@ -26,6 +26,7 @@ class Rack(UppercaseSerialMixin, models.Model):
     """Model representing a physical rack in a data center."""
     name = models.CharField(max_length=256)
     location = models.CharField(max_length=256)
+    size_u = models.PositiveIntegerField()
     serial_number = models.CharField(max_length=200, unique=True, blank=True, null=True)
     serial_fields = ['serial_number']
     status_message = models.ForeignKey('StatusMessage', blank=True, null=True, on_delete=models.SET_NULL)
@@ -45,6 +46,7 @@ class StatusMessage(models.Model):
 class UnitType(models.Model):
     """Model representing different types of units."""
     name = models.CharField(max_length=50, unique=True)
+    size_u = models.PositiveIntegerField()
 
     def __str__(self):
         return self.name
