@@ -1,0 +1,154 @@
+= RackMaster — Development Setup
+
+:toc:
+
+== Requirements
+
+- Docker & Docker Compose (optional)
+- Python 3.11+
+- Node.js 18+ and npm
+
+== Backend (Django REST API)
+
+1. Open a terminal and change into the backend directory:
+
+[source,bash]
+----
+cd backend
+----
+
+2. Create and activate a virtual environment (platform-specific):
+
+[source,bash]
+----
+# macOS / Linux
+python -m venv .venv
+source .venv/bin/activate
+
+# Windows (PowerShell)
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+----
+
+3. Install Python dependencies and run migrations:
+
+[source,bash]
+----
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver 0.0.0.0:8000
+----
+
+Notes:
+
+- The sample API endpoint is at `/api/hello/` (e.g. http://localhost:8000/api/hello/).
+- For development it's convenient to keep `DEBUG = True` in `backend/backend_project/settings.py`.
+
+== Frontend (React + Material UI)
+
+1. Change into the frontend directory:
+
+[source,bash]
+----
+cd frontend
+----
+
+2. Install dependencies and start the dev server:
+
+[source,bash]
+----
+npm install
+npm start
+----
+
+Notes:
+
+- By default the React app expects the backend on the same origin at `/api/`.
+- For local dev you can add a proxy to `frontend/package.json` to forward requests to the Django server:
+
+[source,json]
+----
+{
+  "proxy": "http://localhost:8000"
+}
+----
+
+== Run both services with Docker Compose
+
+If you prefer Docker for development you can build and run both services together:
+
+[source,bash]
+----
+docker-compose up --build
+----
+
+The frontend will be exposed on port `3000` and the backend on `8000` by default.
+
+== Environment variables & configuration
+
+- Backend: you can provide standard Django environment variables (e.g. `SECRET_KEY`, `DEBUG`) or modify `backend/backend_project/settings.py` for local development.
+- Frontend: put any runtime configuration in a `.env` file in the `frontend` directory (and add `.env` to `.dockerignore`).
+
+== Testing & linting
+
+[source,bash]
+----
+# Backend
+cd backend
+python manage.py test
+
+# Frontend
+cd frontend
+npm test
+----
+
+== Troubleshooting
+
+- If the frontend cannot reach the API, ensure the backend is running and either set the `proxy` in `package.json` or use absolute URLs to `http://localhost:8000/api/...`.
+- If using Docker and you change code, the compose setup mounts the local folders into the containers so changes are reflected; otherwise rebuild with `docker-compose up --build`.
+
+== Where to look in the repo
+
+- Backend: backend/
+- Frontend: frontend/
+- Compose file: docker-compose.yml
+
+== Quick commands summary
+
+[source,bash]
+----
+# Local backend
+cd backend && python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt && python manage.py migrate && python manage.py runserver
+
+# Local frontend
+cd frontend && npm install && npm start
+
+# Docker
+docker-compose up --build
+----
+
+Environment files
+
+It's recommended to use environment example files to manage runtime configuration. Three example files are provided:
+
+- `/.env.example` — root-level variables used for convenience in scripts or Docker Compose
+- `/backend/.env.example` — variables for the Django backend
+- `/frontend/.env.example` — variables for the React frontend
+
+Create working env files by copying the examples:
+
+[source,bash]
+----
+cp .env.example .env
+cp backend/.env.example backend/.env
+cp frontend/.env.example frontend/.env
+----
+
+Notes:
+
+- For the frontend, `REACT_APP_` prefixed variables are exposed to the client. Update `REACT_APP_API_URL` in `frontend/.env` if your API runs on a different host/port.
+- Docker Compose automatically reads `.env` at the project root; if you rely on root variables there is no extra configuration required.
+- Keep secrets out of version control — never commit real `SECRET_KEY` or other credentials.
+
+If you'd like, I can also set the `proxy` field in `frontend/package.json` or add a `Makefile` to simplify these commands.
