@@ -6,8 +6,10 @@ import Typography from '@mui/material/Typography'
 export default function App(){
   const [message, setMessage] = useState('Loading...')
 
+  const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000/api/v1'
+
   useEffect(()=>{
-    fetch('/api/hello/')
+    fetch(`${API_BASE}/hello/`)
       .then(r=>r.json())
       .then(d=>setMessage(d.message))
       .catch(()=>setMessage('Could not reach API'))
