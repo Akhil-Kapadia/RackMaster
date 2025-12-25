@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Drawer, Toolbar, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, IconButton, Typography, Avatar } from '@mui/material'
-import { Menu as MenuIcon, Dashboard as DashboardIcon, Settings as SettingsIcon, People as PeopleIcon, AccountCircle as AccountCircleIcon } from '@mui/icons-material'
+import { Menu as MenuIcon, Dashboard as DashboardIcon, Settings as SettingsIcon, People as PeopleIcon, AccountCircle as AccountCircleIcon, AddBox, Analytics, ManageSearch } from '@mui/icons-material'
 import { Link } from 'react-router-dom'
 
 const drawerWidth = 240
@@ -14,7 +14,9 @@ type Props = {
 export default function DashboardLayout({ open, onDrawerToggle, children }: Props) {
   const menuItems = [
     { text: 'Dashboard', to: '/dashboard', icon: <DashboardIcon /> },
-    { text: 'Users', to: '/entities', icon: <PeopleIcon /> },
+    { text: 'Add Inventory', to: '/inventory/add', icon: <AddBox /> },
+    { text: 'Manage Inventory', to: '/inventory/manage', icon: <ManageSearch /> },
+    { text: 'Analytics', to: '/analytics', icon: <Analytics /> },
     { text: 'Settings', to: '#', icon: <SettingsIcon /> },
   ]
 
