@@ -29,8 +29,8 @@ export default function DashboardLayout({ open, onDrawerToggle, children }: Prop
             boxSizing: 'border-box',
             overflowX: 'hidden',
             display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
+              flexDirection: 'column',
+              justifyContent: 'flex-start',
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.primary.contrastText,
           },
@@ -44,7 +44,6 @@ export default function DashboardLayout({ open, onDrawerToggle, children }: Prop
             RackMaster
           </Typography>
         </Box>
-        <Toolbar />
         <Divider />
 
         <List>
@@ -58,7 +57,7 @@ export default function DashboardLayout({ open, onDrawerToggle, children }: Prop
           ))}
         </List>
 
-        <Box sx={{ pb: 2 }}>
+        <Box sx={{ pb: 2, mt: 'auto' }}>
           <Divider />
           <List>
             <ListItem disablePadding>
