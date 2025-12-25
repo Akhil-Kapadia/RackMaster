@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Drawer, Toolbar, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, IconButton, Typography, Avatar } from '@mui/material'
 import { Menu as MenuIcon, Dashboard as DashboardIcon, Settings as SettingsIcon, People as PeopleIcon, AccountCircle as AccountCircleIcon, AddBox, Analytics, ManageSearch } from '@mui/icons-material'
-import { Link } from 'react-router-dom'
+import { Outlet, NavLink } from 'react-router-dom'
 
 const drawerWidth = 240
 
@@ -51,7 +51,14 @@ export default function DashboardLayout({ open, onDrawerToggle, children }: Prop
         <List>
           {menuItems.map((item) => (
             <ListItem key={item.text} disablePadding>
-              <ListItemButton component={Link} to={item.to} sx={{ color: 'inherit' }}>
+              <ListItemButton
+                component={NavLink}
+                to={item.to}
+                sx={{
+                  color: 'inherit',
+                  '&.active': { backgroundColor: 'rgba(255,255,255,0.08)' },
+                }}
+              >
                 <ListItemIcon sx={{ color: 'inherit', minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>{item.icon}</ListItemIcon>
                 <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0, color: 'inherit' }} />
               </ListItemButton>
@@ -78,7 +85,7 @@ export default function DashboardLayout({ open, onDrawerToggle, children }: Prop
 
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
-        {children}
+        <Outlet />
       </Box>
     </Box>
   )

@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress'
 import React, { 
     useState ,
@@ -29,6 +29,34 @@ const EntitiesPage = React.lazy(() => Promise.resolve({ default: () => (
   </Box>
 )}))
 
+const AddInventoryPage = React.lazy(() => Promise.resolve({ default: () => (
+  <Box sx={{ py: 4 }}>
+    <Typography variant="h5">Add Inventory</Typography>
+    <Typography variant="body2" sx={{ mt: 1 }}>Form to add inventory items.</Typography>
+  </Box>
+)}))
+
+const ManageInventoryPage = React.lazy(() => Promise.resolve({ default: () => (
+  <Box sx={{ py: 4 }}>
+    <Typography variant="h5">Manage Inventory</Typography>
+    <Typography variant="body2" sx={{ mt: 1 }}>Tools to search and update inventory.</Typography>
+  </Box>
+)}))
+
+const AnalyticsPage = React.lazy(() => Promise.resolve({ default: () => (
+  <Box sx={{ py: 4 }}>
+    <Typography variant="h5">Analytics</Typography>
+    <Typography variant="body2" sx={{ mt: 1 }}>Charts and reports.</Typography>
+  </Box>
+)}))
+
+const SettingsPage = React.lazy(() => Promise.resolve({ default: () => (
+  <Box sx={{ py: 4 }}>
+    <Typography variant="h5">Settings</Typography>
+    <Typography variant="body2" sx={{ mt: 1 }}>Application settings and preferences.</Typography>
+  </Box>
+)}))
+
 const NotFoundPage: React.FC = () => (
   <Box sx={{ py: 4 }}>
     <Typography variant="h5">404 — Not Found</Typography>
@@ -53,19 +81,23 @@ const App: React.FC = () => {
 
   return (
     <BrowserRouter>
-      <DashboardLayout open={open} onDrawerToggle={handleDrawerToggle}>
-        <Container sx={{ mt: 3 }}>
-          <Suspense fallback={<Loading />}>
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/dashboard" element={<DashboardPage />} />
-              <Route path="/entities" element={<EntitiesPage />} />
-              <Route path="/404" element={<NotFoundPage />} />
-              <Route path="*" element={<Navigate to="/404" replace />} />
-            </Routes>
-          </Suspense>
-        </Container>
-      </DashboardLayout>
+      <Suspense fallback={<Loading />}>
+        <Routes>
+          <Route path="/" element={<DashboardLayout open={open} onDrawerToggle={handleDrawerToggle} />}>
+            <Route index element={<Container sx={{ mt: 3 }}><HomePage /></Container>} />
+            <Route path="dashboard" element={<Container sx={{ mt: 3 }}><DashboardPage /></Container>} />
+            <Route path="entities" element={<Container sx={{ mt: 3 }}><EntitiesPage /></Container>} />
+            <Route path="inventory">
+              <Route path="add" element={<Container sx={{ mt: 3 }}><AddInventoryPage /></Container>} />
+              <Route path="manage" element={<Container sx={{ mt: 3 }}><ManageInventoryPage /></Container>} />
+            </Route>
+            <Route path="analytics" element={<Container sx={{ mt: 3 }}><AnalyticsPage /></Container>} />
+            <Route path="settings" element={<Container sx={{ mt: 3 }}><SettingsPage /></Container>} />
+            <Route path="404" element={<Container sx={{ mt: 3 }}><NotFoundPage /></Container>} />
+            <Route path="*" element={<Navigate to="/404" replace />} />
+          </Route>
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   )
 }
