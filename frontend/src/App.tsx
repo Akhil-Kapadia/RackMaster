@@ -1,15 +1,14 @@
-import React, { Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Link, Navigate } from 'react-router-dom'
-import AppBar from '@mui/material/AppBar'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
-import Container from '@mui/material/Container'
-import Box from '@mui/material/Box'
 import CircularProgress from '@mui/material/CircularProgress'
+import React, { 
+    useState ,
+    Suspense
+} from 'react';
+import { Box, Container, Typography } from '@mui/material'
+import DashboardLayout from './pages/dashboardLayout'
 
 // Lazy pages (move to separate files as app grows)
-const HomePage = React.lazy(() => Promise.resolve({ default: () => (
+const HomePage = React.lazy(() => Promise.resolve({ default: (props?: { mobileOpen?: boolean; onDrawerToggle?: () => void }) => (
   <Box sx={{ py: 4 }}>
     <Typography variant="h5">Welcome</Typography>
     <Typography variant="body1" sx={{ mt: 1 }}>This is the home page. Start adding pages under <strong>src/pages</strong>.</Typography>
@@ -43,31 +42,30 @@ const Loading: React.FC = () => (
   </Box>
 )
 
+// DashboardLayout has been moved to src/pages/dashboardLayout.tsx
+
 const App: React.FC = () => {
+  const [open, setOpen] = useState(true)
+
+  const handleDrawerToggle = () => {
+    setOpen((prev) => !prev)
+  }
+
   return (
     <BrowserRouter>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            RackMaster
-          </Typography>
-          <Button color="inherit" component={Link} to="/">Home</Button>
-          <Button color="inherit" component={Link} to="/dashboard">Dashboard</Button>
-          <Button color="inherit" component={Link} to="/entities">Entities</Button>
-        </Toolbar>
-      </AppBar>
-
-      <Container sx={{ mt: 3 }}>
-        <Suspense fallback={<Loading />}>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/entities" element={<EntitiesPage />} />
-            <Route path="/404" element={<NotFoundPage />} />
-            <Route path="*" element={<Navigate to="/404" replace />} />
-          </Routes>
-        </Suspense>
-      </Container>
+      <DashboardLayout open={open} onDrawerToggle={handleDrawerToggle}>
+        <Container sx={{ mt: 3 }}>
+          <Suspense fallback={<Loading />}>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/entities" element={<EntitiesPage />} />
+              <Route path="/404" element={<NotFoundPage />} />
+              <Route path="*" element={<Navigate to="/404" replace />} />
+            </Routes>
+          </Suspense>
+        </Container>
+      </DashboardLayout>
     </BrowserRouter>
   )
 }
