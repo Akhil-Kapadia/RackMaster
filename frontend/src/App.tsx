@@ -7,62 +7,15 @@ import React, {
 import { Box, Container, Typography } from '@mui/material'
 import DashboardLayout from './pages/dashboardLayout'
 
-// Lazy pages (move to separate files as app grows)
-const HomePage = React.lazy(() => Promise.resolve({ default: (props?: { mobileOpen?: boolean; onDrawerToggle?: () => void }) => (
-  <Box sx={{ py: 4 }}>
-    <Typography variant="h5">Welcome</Typography>
-    <Typography variant="body1" sx={{ mt: 1 }}>This is the home page. Start adding pages under <strong>src/pages</strong>.</Typography>
-  </Box>
-)}))
-
-const DashboardPage = React.lazy(() => Promise.resolve({ default: () => (
-  <Box sx={{ py: 4 }}>
-    <Typography variant="h5">Dashboard</Typography>
-    <Typography variant="body2" sx={{ mt: 1 }}>Place dashboard widgets and live graphs here.</Typography>
-  </Box>
-)}))
-
-const EntitiesPage = React.lazy(() => Promise.resolve({ default: () => (
-  <Box sx={{ py: 4 }}>
-    <Typography variant="h5">Entities</Typography>
-    <Typography variant="body2" sx={{ mt: 1 }}>List and manage racks, units and devices.</Typography>
-  </Box>
-)}))
-
-const AddInventoryPage = React.lazy(() => Promise.resolve({ default: () => (
-  <Box sx={{ py: 4 }}>
-    <Typography variant="h5">Add Inventory</Typography>
-    <Typography variant="body2" sx={{ mt: 1 }}>Form to add inventory items.</Typography>
-  </Box>
-)}))
-
-const ManageInventoryPage = React.lazy(() => Promise.resolve({ default: () => (
-  <Box sx={{ py: 4 }}>
-    <Typography variant="h5">Manage Inventory</Typography>
-    <Typography variant="body2" sx={{ mt: 1 }}>Tools to search and update inventory.</Typography>
-  </Box>
-)}))
-
-const AnalyticsPage = React.lazy(() => Promise.resolve({ default: () => (
-  <Box sx={{ py: 4 }}>
-    <Typography variant="h5">Analytics</Typography>
-    <Typography variant="body2" sx={{ mt: 1 }}>Charts and reports.</Typography>
-  </Box>
-)}))
-
-const SettingsPage = React.lazy(() => Promise.resolve({ default: () => (
-  <Box sx={{ py: 4 }}>
-    <Typography variant="h5">Settings</Typography>
-    <Typography variant="body2" sx={{ mt: 1 }}>Application settings and preferences.</Typography>
-  </Box>
-)}))
-
-const NotFoundPage: React.FC = () => (
-  <Box sx={{ py: 4 }}>
-    <Typography variant="h5">404 — Not Found</Typography>
-    <Typography variant="body2" sx={{ mt: 1 }}>The requested page was not found.</Typography>
-  </Box>
-)
+// Lazy pages (moved to separate files under src/pages)
+const HomePage = React.lazy(() => import('./pages/HomePage'))
+const DashboardPage = React.lazy(() => import('./pages/DashboardPage'))
+const EntitiesPage = React.lazy(() => import('./pages/EntitiesPage'))
+const AddInventoryPage = React.lazy(() => import('./pages/AddInventoryPage'))
+const ManageInventoryPage = React.lazy(() => import('./pages/ManageInventoryPage'))
+const AnalyticsPage = React.lazy(() => import('./pages/AnalyticsPage'))
+const SettingsPage = React.lazy(() => import('./pages/SettingsPage'))
+const NotFoundPage = React.lazy(() => import('./pages/NotFoundPage'))
 
 const Loading: React.FC = () => (
   <Box sx={{ display: 'flex', justifyContent: 'center', py: 6 }}>
