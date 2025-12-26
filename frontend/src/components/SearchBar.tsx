@@ -1,11 +1,13 @@
 import React, { useMemo, useState } from 'react'
 import { Autocomplete, TextField, IconButton, InputAdornment, Box, Checkbox } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
+import searchApi from '../services/searchService'
 
 type Option = { title: string; group: string }
 
 type Props = {
   onSearch: (selectedTitles: string[], inputValue: string) => void
+  onResults?: (results: any[]) => void
 }
 
 const sampleOptions: Option[] = [
@@ -17,7 +19,7 @@ const sampleOptions: Option[] = [
   { title: 'Server 02', group: 'Devices' },
 ]
 
-export default function SearchBar({ onSearch }: Props) {
+export default function SearchBar({ onSearch, onResults }: Props) {
   const [value, setValue] = useState<Option[]>([])
   const [inputValue, setInputValue] = useState('')
 
@@ -35,16 +37,15 @@ export default function SearchBar({ onSearch }: Props) {
         inputValue={inputValue}
         onInputChange={(_, v) => setInputValue(v)}
         disableCloseOnSelect
-        renderOption={(props, option, { selected }) => (
-          <li {...props}>
-            <Checkbox
-              size="small"
-              checked={selected}
-              sx={{ mr: 1 }}
-            />
-            {option.title}
-          </li>
-        )}
+        renderOption={(props, option, { selected }) => {
+          const { key, ...liProps } = props as any
+          return (
+            <li key={key} {...liProps}>
+              <Checkbox size="small" checked={selected} sx={{ mr: 1 }} />
+              {option.title}
+            </li>
+          )
+        }}
         renderInput={(params) => (
           <TextField
             {...params}
@@ -56,7 +57,21 @@ export default function SearchBar({ onSearch }: Props) {
                 <InputAdornment position="end">
                   <IconButton
                     aria-label="trigger search"
-                    onClick={() => onSearch(value.map((s) => s.title), inputValue)}
+                    onClick={async () => {
+                      const selected = value.map((s) => s.title)
+                      onSearch(selected, inputValue)
+                      try {
+                        const resp = await searchApi({
+                          model: 'Rack',
+                          filters: { name__icontains: inputValue },
+                          fields: ['id', 'name'],
+                          limit: 50,
+                        })
+                        if (onResults) onResults(resp.results)
+                      } catch (err) {
+                        console.error('Search error', err)
+                      }
+                    }}
                     edge="end"
                   >
                     <SearchIcon />
