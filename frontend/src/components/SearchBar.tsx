@@ -49,8 +49,9 @@ export default function SearchBar({ onSearch, onResults }: Props) {
         renderInput={(params) => (
           <TextField
             {...params}
-            size="small"
-            placeholder="Search and select..."
+            size="medium"
+            variant='outlined'
+            placeholder="Search Inventory..."
             InputProps={{
               ...params.InputProps,
               endAdornment: (
