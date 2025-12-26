@@ -53,7 +53,7 @@ migrate:
 
 run-backend:
 	@echo "Starting Django dev server (requires activated server venv)..."
-	cd server && . .venv/bin/activate && python manage.py runserver 0.0.0.0:8000
+	cd server && . .venv/bin/activate && python manage.py runserver 127.0.0.1:8000
 
 install-frontend:
 	@echo "Installing frontend dependencies..."
