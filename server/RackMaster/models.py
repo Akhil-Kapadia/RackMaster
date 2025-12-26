@@ -30,6 +30,9 @@ class Rack(UppercaseSerialMixin, models.Model):
     serial_number = models.CharField(max_length=200, unique=True, blank=True, null=True)
     serial_fields = ['serial_number']
     status_message = models.ForeignKey('StatusMessage', blank=True, null=True, on_delete=models.SET_NULL)
+    # Char feild to store a URL link or order number
+    order_link = models.CharField(max_length=512, blank=True, null=True)
+    note = models.TextField(blank=True, null=True)
     
     def __str__(self):
         return f"{self.name} ({self.serial_number})"
@@ -47,6 +50,7 @@ class UnitType(models.Model):
     """Model representing different types of units."""
     name = models.CharField(max_length=50, unique=True)
     size_u = models.PositiveIntegerField()
+    note = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -59,6 +63,9 @@ class Unit(UppercaseSerialMixin, models.Model):
     serial_number = models.CharField(max_length=256, unique=True)
     serial_fields = ['serial_number']
     status_message = models.ForeignKey(StatusMessage, blank=True, null=True, on_delete=models.SET_NULL)
+    # Char feild to store a URL link or order number
+    order_link = models.CharField(max_length=512, blank=True, null=True)
+    note = models.TextField(blank=True, null=True)
 
     # connections to other units (many-to-many self relationship)
     connections = models.ManyToManyField('self', through='Connection', symmetrical=False, related_name='connected_to', blank=True)
@@ -75,6 +82,9 @@ class Device(UppercaseSerialMixin, models.Model):
     serial_fields = ['serial_number']
     status_message = models.ForeignKey(StatusMessage, blank=True, null=True, on_delete=models.SET_NULL)
     created_at = models.DateTimeField(auto_now_add=True)
+    # Char feild to store a URL link or order number
+    order_link = models.CharField(max_length=512, blank=True, null=True)
+    note = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.device_type} ({self.serial_number})"
@@ -82,6 +92,7 @@ class Device(UppercaseSerialMixin, models.Model):
 class DeviceType(models.Model):
     """Model representing different types of devices."""
     name = models.CharField(max_length=50, unique=True)
+    note = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -93,6 +104,9 @@ class DeviceModule(UppercaseSerialMixin, models.Model):
     serial_number = models.CharField(max_length=200, unique=True)
     serial_fields = ['serial_number']
     status_message = models.ForeignKey(StatusMessage, blank=True, null=True, on_delete=models.SET_NULL)
+    # Char feild to store a URL link or order number
+    order_link = models.CharField(max_length=512, blank=True, null=True)
+    note = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.name} ({self.serial_number})"
