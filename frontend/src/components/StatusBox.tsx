@@ -45,7 +45,7 @@ type Props = {
 
 export default function StatusBox({ item, onClick }: Props) {
   return (
-    <Card elevation={2} sx={{ minHeight: 120 }}>
+    <Card elevation={2}>
       <CardActionArea onClick={() => onClick?.(item)}>
         <CardContent sx={{ display: 'flex', alignItems: 'center', gap: 2, px: 2 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1 }}>
