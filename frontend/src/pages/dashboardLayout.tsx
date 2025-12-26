@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Drawer, Toolbar, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, IconButton, Typography, Avatar } from '@mui/material'
+import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, IconButton, Typography, Avatar } from '@mui/material'
 import { Menu as MenuIcon, Dashboard as DashboardIcon, Settings as SettingsIcon, People as PeopleIcon, AccountCircle as AccountCircleIcon, AddBox, Analytics, ManageSearch } from '@mui/icons-material'
 import { Outlet, NavLink } from 'react-router-dom'
 
@@ -84,7 +84,6 @@ export default function DashboardLayout({ open, onDrawerToggle, children }: Prop
       </Drawer>
 
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <Toolbar />
         <Outlet />
       </Box>
     </Box>

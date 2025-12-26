@@ -3,7 +3,7 @@ import { Box, Typography, Grid, Stack } from '@mui/material'
 import SearchBar from '../components/SearchBar'
 import StatusBox, { Item as StatusItem } from '../components/StatusBox'
 import ItemModal from '../components/ItemModal'
-
+import { Avatar } from '@mui/material'
 type Status = 'ok' | 'error' | 'empty'
 
 type BoxType = 'rack' | 'switch' | 'device'

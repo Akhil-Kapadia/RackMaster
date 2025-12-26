@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress'
-import React, { 
-    useState ,
-    Suspense
+import React, {
+  useState,
+  Suspense
 } from 'react';
 import { Box, Container, Typography } from '@mui/material'
 import DashboardLayout from './pages/dashboardLayout'
