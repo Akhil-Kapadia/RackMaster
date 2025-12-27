@@ -1,4 +1,5 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import { AxiosRequestConfig } from 'axios';
+import { api } from './apiClient';
 import { useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query';
 
 export interface SearchParams {
@@ -14,16 +15,10 @@ export interface SearchResponse<T = any> {
   results: T[];
 }
 
-const DEFAULT_TIMEOUT = 30000;
-
-const axiosInstance: AxiosInstance = axios.create({
-  baseURL: '',
-  timeout: DEFAULT_TIMEOUT,
-});
 
 export async function searchApi<T = any>(params: SearchParams, config?: AxiosRequestConfig): Promise<SearchResponse<T>> {
   // We move the data to the 'params' key for a GET request
-  const res = await axiosInstance.get<SearchResponse<T>>('/api/v1/search/', {
+  const res = await api.get<SearchResponse<T>>('search/', {
     ...config,
     params: {
       model: params.model,
@@ -54,5 +49,4 @@ export function useSearch<T = any>(
   });
 }
 
-export { axiosInstance };
 export default searchApi;

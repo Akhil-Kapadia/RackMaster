@@ -1,29 +1,72 @@
-import React, { useMemo, useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Autocomplete, TextField, IconButton, InputAdornment, Box, Checkbox } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
 import searchApi from '../services/searchService'
+import { fetchUnitTypes, fetchDeviceTypes } from '../services/modelServices'
 
-type Option = { title: string; group: string }
+type Option = { title: string; group: string; id?: number }
 
 type Props = {
   onSearch: (selectedTitles: string[], inputValue: string) => void
   onResults?: (results: any[]) => void
 }
-
-const sampleOptions: Option[] = [
-  { title: 'Rack 1', group: 'Racks' },
-  { title: 'Rack 2', group: 'Racks' },
-  { title: 'Switch A', group: 'Switches' },
-  { title: 'Switch B', group: 'Switches' },
-  { title: 'Server 01', group: 'Devices' },
-  { title: 'Server 02', group: 'Devices' },
-]
+// Options are loaded from the API: UnitType and DeviceType
 
 export default function SearchBar({ onSearch, onResults }: Props) {
   const [value, setValue] = useState<Option[]>([])
   const [inputValue, setInputValue] = useState('')
+  const [grouped, setGrouped] = useState<Option[]>([])
 
-  const grouped = useMemo(() => sampleOptions, [])
+  useEffect(() => {
+    let mounted = true
+    const fetchTypes = async () => {
+      try {
+        const [unitResp, deviceResp] = await Promise.all([
+          fetchUnitTypes(),
+          fetchDeviceTypes(),
+        ])
+
+        if (!mounted) return
+
+        const unitList: any[] = Array.isArray(unitResp)
+          ? unitResp
+          : unitResp?.results
+          ? unitResp.results
+          : unitResp
+          ? [unitResp]
+          : []
+
+        const deviceList: any[] = Array.isArray(deviceResp)
+          ? deviceResp
+          : deviceResp?.results
+          ? deviceResp.results
+          : deviceResp
+          ? [deviceResp]
+          : []
+
+        const unitOptions: Option[] = unitList.map((u: any) => ({
+          title: u.name,
+          group: u.name,
+          id: u.id,
+        }))
+
+        const deviceOptions: Option[] = deviceList.map((d: any) => ({
+          title: d.name,
+          group: d.name,
+          id: d.id,
+        }))
+
+        setGrouped([...unitOptions, ...deviceOptions])
+      } catch (err) {
+        console.error('Failed to load types for search bar', err)
+      }
+    }
+
+    fetchTypes()
+    return () => {
+      mounted = false
+    }
+  }, [])
 
   return (
     <Box sx={{ width: 360 }}>
